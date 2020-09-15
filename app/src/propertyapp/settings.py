@@ -38,10 +38,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'corsheaders',
     'propertyapp',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -49,8 +51,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
-
+CORS_ALLOW_ALL_ORIGINS = True
 ROOT_URLCONF = 'propertyapp.urls'
 
 TEMPLATES = [
@@ -81,18 +84,18 @@ DATABASES = {
         
          # local db
         
-        # 'NAME': 'idealista',
-        # 'USER': 'root',
-        # 'PASSWORD': '',
-        # 'HOST': '127.0.0.1',
+        'NAME': 'idealista',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': 'host.docker.internal',
 
         # idealist DB on 162.241.225.63
         
-        'NAME': 'worldom7_idealista_02',
-        'USER': 'worldom7_carlosh',
-        'PASSWORD': 'Bonita2020',
-        'HOST': '162.241.225.63',
-        'PORT': '3306',
+        # 'NAME': 'worldom7_idealista_02',
+        # 'USER': 'worldom7_carlosh',
+        # 'PASSWORD': 'Bonita2020',
+        # 'HOST': '162.241.225.63',
+        # 'PORT': '3306',
     }
 }
 
