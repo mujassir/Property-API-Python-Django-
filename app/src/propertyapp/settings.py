@@ -84,18 +84,18 @@ DATABASES = {
         
          # local db
         
-        'NAME': 'idealista',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': 'host.docker.internal',
+        # 'NAME': 'idealista',
+        # 'USER': 'root',
+        # 'PASSWORD': '',
+        # 'HOST': 'host.docker.internal',
 
         # idealist DB on 162.241.225.63
         
-        # 'NAME': 'worldom7_idealista_02',
-        # 'USER': 'worldom7_carlosh',
-        # 'PASSWORD': 'Bonita2020',
-        # 'HOST': '162.241.225.63',
-        # 'PORT': '3306',
+        'NAME': 'worldom7_idealista_02',
+        'USER': 'worldom7_carlosh',
+        'PASSWORD': 'Bonita2020',
+        'HOST': '162.241.225.63',
+        'PORT': '3306',
     }
 }
 
