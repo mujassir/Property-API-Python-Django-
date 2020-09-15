@@ -1,7 +1,11 @@
 from django.db import models
 from django.db.models import F, Func
 
+# Implemented Haversine Formula to calculate distances based on Latitude and Longitude.
+
 # https://gist.github.com/rchrd2/5e0b014640a459a14ef038975d2a3683
+
+# This class creates query filters to calculate distances in the db
 
 class DistanceManager(models.Manager):
     def get_with_distance(self, latitude, longitude):

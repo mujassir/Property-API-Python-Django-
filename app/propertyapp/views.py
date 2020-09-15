@@ -1,23 +1,37 @@
-import decimal
+from propertyapp.constants import Constants, ErrorMessages, ErrorReason
+from propertyapp.api_key_validator import APIKeyValidator
+from propertyapp.property_manager import propertyManager
 from django.http import JsonResponse
-from propertyapp.serializer import propertySerializer
-from propertyapp.models import propertyModel
+from propertyapp.models import PropertyInputModel
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+import copy
 
+# POST method implementation for property API
 
 @api_view(['POST'])
-def propertyAPI(requst):
-    if requst.method == 'POST':
-        latitude = requst.data['latitude']
-        longitude = requst.data['longitude']
-        distance = requst.data['distance']
+def propertyAPI(request):
+    if request.method == 'POST':
 
-        querySet = propertyModel.objects2.get_with_distance(latitude=latitude, longitude=longitude).filter(
-            distance__gt=5, distance__lt=distance).order_by('distance').distinct()[:100]
+        # Get post parameters
+        params = PropertyInputModel.create(request.data)
 
-        serializer = propertySerializer(querySet, many=True, context={
-            'longitude': longitude, 'latitude': latitude, 'distance': distance})
-        return Response(serializer.data)
+        # Validate required parameters
+        if params.is_valid == False:
+            if params.error_reason == ErrorReason.RequiredParametersMissing:
+                message = copy.deepcopy(
+                    ErrorMessages.RequiredParametersMissing)
+                message["message"] += params.missing_parameters
+                return JsonResponse(message)
+            if params.error_reason == ErrorReason.OrderAttributeNotFound:
+                message = copy.deepcopy(ErrorMessages.OrderAttributeNotFound)
+                message["message"] += ",".join(Constants.ORDER_OPTIONS)
+                return JsonResponse(message)
 
-# return JsonResponse({"lat": latitude, "long": longitude, "dist": distance})
+        # Validate APIKEY
+
+        if APIKeyValidator.Validate(params.APIKEY) == False:
+            return JsonResponse(ErrorMessages.InvalidAPIKey)
+
+        response = propertyManager.getProperties(params)
+        return Response(response)

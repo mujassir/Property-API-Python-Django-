@@ -4,6 +4,7 @@ from rest_framework import serializers
 from django.db import models
 import math
 
+# Serializer class to serialize the propertyModel class
 
 class propertySerializer(serializers.ModelSerializer):
     distance = serializers.SerializerMethodField('get_distance')

@@ -1,6 +1,9 @@
+from propertyapp.constants import Constants, ErrorReason
+from django.http import request
 from propertyapp.distance_manager import DistanceManager
 from django.db import models
 
+# Property model that is used to send records in the response
 
 class propertyModel(models.Model):
     class Meta:
@@ -46,7 +49,7 @@ class propertyModel(models.Model):
     ad_owner_commercialId = models.CharField(max_length=255)
     ad_origin = models.CharField(max_length=255)
     ad_characteristics_hasGarden = models.CharField(max_length=255)
-    comment = models.CharField(max_length=255)
+    comment = models.CharField(max_length=4000)
     location_tree = models.CharField(max_length=255)
     location_zone = models.CharField(max_length=255)
     charac_basic = models.CharField(max_length=255)
@@ -70,3 +73,73 @@ class propertyModel(models.Model):
     ad_characteristics_hasParking = models.BooleanField()
     ad_characteristics_hasSwimmingPool = models.BooleanField()
     ad_characteristics_hasTerrace = models.BooleanField()
+
+# Property input mode is used to get POST parameters and performs validation
+
+class PropertyInputModel(models.Model):
+
+    # Required Parameters
+
+    APIKEY = models.CharField(max_length=255)
+    latitude = models.FloatField()
+    longitude = models.FloatField()
+    distance = models.FloatField()
+    ad_operation = models.IntegerField()
+    ad_typology = models.IntegerField()
+    ad_owner_type = models.IntegerField()
+
+    # Optional Parameters
+
+    minPrice = models.FloatField()
+    maxPrice = models.FloatField()
+    order = models.CharField(max_length=10)
+    sort = models.CharField(max_length=4)
+
+    # Validation Attributes
+    error_reason = models.IntegerField()
+    is_valid = models.BooleanField()
+    missing_parameters = models.CharField(max_length=255)
+
+    @classmethod
+    def create(cls, params):
+
+        # Required Parameters
+
+        APIKEY = params.get('APIKEY')
+        latitude = params.get('latitude')
+        longitude = params.get('longitude')
+        distance = params.get('distance')
+        ad_operation = params.get('ad_operation')
+        ad_typology = params.get('ad_typology')
+        ad_owner_type = params.get('ad_owner_type')
+
+        # Optional Parameters
+
+        minPrice = params.get('minPrice')
+        maxPrice = params.get('maxPrice')
+        order = params.get('order')
+        sort = params.get('sort')
+
+        # Validation Attributes
+
+        is_valid = True
+        error_reason = ErrorReason.NoReason
+        missing_parameters = ""
+
+        for param in Constants.REQUIRED_PARAMETERS:
+            if params.get(param) is None:
+                is_valid = False
+                error_reason = ErrorReason.RequiredParametersMissing
+                missing_parameters = missing_parameters + "," + param
+
+        if missing_parameters.startswith(","):
+            missing_parameters = missing_parameters.lstrip(",")
+
+        if not (order is None):
+            if not Constants.ORDER_OPTIONS.__contains__(order):
+                is_valid = False
+                error_reason = ErrorReason.OrderAttributeNotFound
+
+        obj = cls(APIKEY=APIKEY, latitude=latitude, longitude=longitude, distance=distance, ad_operation=ad_operation, ad_typology=ad_typology,
+                  ad_owner_type=ad_owner_type, minPrice=minPrice, maxPrice=maxPrice, order=order, sort=sort, is_valid=is_valid, error_reason=error_reason, missing_parameters=missing_parameters)
+        return obj
