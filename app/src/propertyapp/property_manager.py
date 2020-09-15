@@ -16,7 +16,7 @@ class propertyManager:
             latitude=latitude, longitude=longitude)
 
         # distance filter
-        querySet = querySet.filter(distance__gt=5, distance__lt=distance)
+        querySet = querySet.filter(distance__lte=distance)
 
         # ad_operation filter
         if params.ad_operation != 0:
