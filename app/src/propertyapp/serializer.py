@@ -14,7 +14,7 @@ class propertySerializer(serializers.ModelSerializer):
         longitude = decimal.Decimal(self.context.get("longitude"))
         distance = calculate_distance(
             lat1=latitude, long1=longitude, lat2=obj.latitude, long2=obj.longitude)
-        return distance
+        return round(distance, 3)
 
     class Meta:
         model = propertyModel
