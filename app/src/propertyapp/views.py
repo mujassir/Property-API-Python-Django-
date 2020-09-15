@@ -1,7 +1,7 @@
+from django.http import JsonResponse
 from propertyapp.constants import Constants, ErrorMessages, ErrorReason
 from propertyapp.api_key_validator import APIKeyValidator
 from propertyapp.property_manager import propertyManager
-from django.http import JsonResponse
 from propertyapp.models import PropertyInputModel
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
