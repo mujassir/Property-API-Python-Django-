@@ -25,7 +25,9 @@ SECRET_KEY = 'e12$zgmd)!y_tg6$z3w+t%h5v8muz&*k-@28_m881=qioezt21'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'cahernanolmo-api.herokuapp.com'
+]
 
 
 # Application definition
