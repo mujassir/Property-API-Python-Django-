@@ -1,1 +1,1 @@
-web: gunicorn --bind 0.0.0.0:8000 propertyapp.wsgi
+web: gunicorn --bind 0.0.0.0:$PORT propertyapp.wsgi
