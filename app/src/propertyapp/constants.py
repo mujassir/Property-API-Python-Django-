@@ -26,7 +26,7 @@ class ErrorMessages(models.Model):
     RequiredParametersMissing = {
         "code": 400,
         "error_code": 'RequiredParametersMissing',
-        "message": "Required rarameters are missing: "
+        "message": "Required parameters are missing: "
     }
 
     OrderAttributeNotFound = {
