@@ -2,5 +2,5 @@ build:
     docker:
       web: app/Dockerfile
 run:
-    web:  docker-entrypoint.sh
+    web:  python manage.py collectstatic --noinput && gunicorn --bind 0.0.0.0:$PORT propertyapp.wsgi
     # web: python manage.py runserver 0.0.0.0:8000
