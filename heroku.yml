@@ -2,5 +2,5 @@ build:
     docker:
       web: app/Dockerfile
 run:
-    web:  docker-entrypoint.sh
+    web:  app/docker-entrypoint.sh
     # web: python manage.py runserver 0.0.0.0:8000
