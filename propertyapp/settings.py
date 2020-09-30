@@ -23,10 +23,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'e12$zgmd)!y_tg6$z3w+t%h5v8muz&*k-@28_m881=qioezt21'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
-    '3.9.223.174'
+    '3.9.223.174',
+    'localhost'
 ]
 
 
@@ -86,18 +87,23 @@ DATABASES = {
         
          # local db
         
-        # 'NAME': 'idealista',
-        # 'USER': 'root',
-        # 'PASSWORD': '',
+        'NAME': 'idealista',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': '127.0.0.1',
+
+
+        # To run on a docker instance
         # 'HOST': 'host.docker.internal',
+        
 
         # idealist DB on 162.241.225.63
         
-        'NAME': 'worldom7_idealista_02',
-        'USER': 'worldom7_carlosh',
-        'PASSWORD': 'Bonita2020',
-        'HOST': '162.241.225.63',
-        'PORT': '3306',
+        # 'NAME': 'worldom7_idealista_02',
+        # 'USER': 'worldom7_carlosh',
+        # 'PASSWORD': 'Bonita2020',
+        # 'HOST': '162.241.225.63',
+        # 'PORT': '3306',
     }
 }
 

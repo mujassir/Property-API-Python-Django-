@@ -1,12 +1,15 @@
 import decimal
-from propertyapp.models import propertyModel
+from propertyapp.config.configuration import Configuration
+from propertyapp.common.constants import Constants
+from propertyapp.models import PropertyModel
 from rest_framework import serializers
 from django.db import models
 import math
 
-# Serializer class to serialize the propertyModel class
+# Serializer class to serialize the PropertyModel class
 
-class propertySerializer(serializers.ModelSerializer):
+
+class PropertySerializer(serializers.ModelSerializer):
     distance = serializers.SerializerMethodField('get_distance')
 
     def get_distance(self, obj):
@@ -17,7 +20,7 @@ class propertySerializer(serializers.ModelSerializer):
         return round(distance, 3)
 
     class Meta:
-        model = propertyModel
+        model = PropertyModel
         fields = '__all__'
 
 
@@ -25,11 +28,12 @@ class propertySerializer(serializers.ModelSerializer):
 # https://stackoverflow.com/questions/19412462/getting-distance-between-two-points-based-on-latitude-longitude
 
 def calculate_distance(lat1, long1, lat2, long2):
-    radius = 6371.0  # Earth radius in km
     dlat = math.radians(lat2-lat1)
     dlon = math.radians(long2-long1)
     a = math.sin(dlat/2) * math.sin(dlat/2) + math.cos(math.radians(lat1)) \
         * math.cos(math.radians(lat2)) * math.sin(dlon/2) * math.sin(dlon/2)
     c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
-    d = radius * c
+    d = Constants.EARCH_RADIUS_KM * c
+    if Configuration.DISTANCE_UNIT == Constants.METER:
+        d = d * 1000
     return d
