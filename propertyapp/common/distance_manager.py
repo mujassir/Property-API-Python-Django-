@@ -1,3 +1,4 @@
+from propertyapp.common.constants import Constants
 from django.db import models
 from django.db.models import F, Func
 
@@ -31,7 +32,7 @@ class DistanceManager(models.Manager):
         radflong = Radians(F('longitude'))
 
         # Note 3959.0 is for miles. Use 6371 for kilometers
-        Expression = 6371.0 * Acos(Cos(radlat) * Cos(radflat) *
+        Expression = Constants.EARCH_RADIUS_KM * Acos(Cos(radlat) * Cos(radflat) *
                                    Cos(radflong - radlong) +
                                    Sin(radlat) * Sin(radflat))
 

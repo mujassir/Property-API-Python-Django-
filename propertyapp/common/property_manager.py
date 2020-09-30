@@ -1,18 +1,18 @@
-from propertyapp.constants import Constants
+from propertyapp.config.configuration import Configuration
 from django.http import request
-from propertyapp.serializer import propertySerializer
-from propertyapp.models import propertyModel
+from propertyapp.serializer import PropertySerializer
+from propertyapp.models import PropertyModel
 
 # Manager class to apply filters, serialize result set and return
 
-class propertyManager:
+class PropertyManager:
     def getProperties(params):
 
         latitude = params.latitude
         longitude = params.longitude
         distance = params.distance
 
-        querySet = propertyModel.objects2.get_with_distance(
+        querySet = PropertyModel.objects2.get_with_distance(
             latitude=latitude, longitude=longitude)
 
         # distance filter
@@ -41,8 +41,8 @@ class propertyManager:
         # order by
         if not (params.order is None):
             order = params.order
-            if order == Constants.ORDER_OPTION_ROOM:
-                order = Constants.ORDER_OPTION_ROOM_COLUMN_NAME
+            if order == Configuration.ORDER_OPTION_ROOM:
+                order = Configuration.ORDER_OPTION_ROOM_COLUMN_NAME
             if params.sort == "desc":
                 order = "-" + order
 
@@ -50,8 +50,8 @@ class propertyManager:
 
         # Distinct and Max records
 
-        querySet = querySet.distinct()[:Constants.MAX_RECORD_COUNT]
+        querySet = querySet.distinct()[:Configuration.MAX_RECORD_COUNT]
 
-        serializer = propertySerializer(querySet, many=True, context={
+        serializer = PropertySerializer(querySet, many=True, context={
             'longitude': longitude, 'latitude': latitude, 'distance': distance})
         return serializer.data

@@ -1,7 +1,9 @@
 from django.http import JsonResponse
-from propertyapp.constants import Constants, ErrorMessages, ErrorReason
+from propertyapp.config.configuration import Configuration
+from propertyapp.config.error_message import ErrorMessage
+from propertyapp.config.error_reason import ErrorReason
 from propertyapp.api_key_validator import APIKeyValidator
-from propertyapp.property_manager import propertyManager
+from propertyapp.common.property_manager import PropertyManager
 from propertyapp.models import PropertyInputModel
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -20,18 +22,18 @@ def propertyAPI(request):
         if params.is_valid == False:
             if params.error_reason == ErrorReason.RequiredParametersMissing:
                 message = copy.deepcopy(
-                    ErrorMessages.RequiredParametersMissing)
+                    ErrorMessage.RequiredParametersMissing)
                 message["message"] += params.missing_parameters
                 return JsonResponse(message)
             if params.error_reason == ErrorReason.OrderAttributeNotFound:
-                message = copy.deepcopy(ErrorMessages.OrderAttributeNotFound)
-                message["message"] += ",".join(Constants.ORDER_OPTIONS)
+                message = copy.deepcopy(ErrorMessage.OrderAttributeNotFound)
+                message["message"] += ",".join(Configuration.ORDER_OPTIONS)
                 return JsonResponse(message)
 
         # Validate APIKEY
 
         if APIKeyValidator.Validate(params.APIKEY) == False:
-            return JsonResponse(ErrorMessages.InvalidAPIKey)
+            return JsonResponse(Configuration.InvalidAPIKey)
 
-        response = propertyManager.getProperties(params)
+        response = PropertyManager.getProperties(params)
         return Response(response)

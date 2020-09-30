@@ -1,11 +1,14 @@
-from propertyapp.constants import Constants, ErrorReason
+from propertyapp.common.constants import Constants
+from propertyapp.config.configuration import Configuration
+from propertyapp.config.error_reason import ErrorReason
 from django.http import request
-from propertyapp.distance_manager import DistanceManager
+from propertyapp.common.distance_manager import DistanceManager
 from django.db import models
 
 # Property model that is used to send records in the response
 
-class propertyModel(models.Model):
+
+class PropertyModel(models.Model):
     class Meta:
         db_table = 'PROPERTY_DETAILS'
 
@@ -76,6 +79,7 @@ class propertyModel(models.Model):
 
 # Property input mode is used to get POST parameters and performs validation
 
+
 class PropertyInputModel(models.Model):
 
     # Required Parameters
@@ -126,7 +130,7 @@ class PropertyInputModel(models.Model):
         error_reason = ErrorReason.NoReason
         missing_parameters = ""
 
-        for param in Constants.REQUIRED_PARAMETERS:
+        for param in Configuration.REQUIRED_PARAMETERS:
             if params.get(param) is None:
                 is_valid = False
                 error_reason = ErrorReason.RequiredParametersMissing
@@ -136,9 +140,14 @@ class PropertyInputModel(models.Model):
             missing_parameters = missing_parameters.lstrip(",")
 
         if not (order is None):
-            if not Constants.ORDER_OPTIONS.__contains__(order):
+            if not Configuration.ORDER_OPTIONS.__contains__(order):
                 is_valid = False
                 error_reason = ErrorReason.OrderAttributeNotFound
+
+        # Convert input (meters) to KMs
+
+        if Configuration.DISTANCE_UNIT == Constants.METER:
+            distance = distance / 1000
 
         obj = cls(APIKEY=APIKEY, latitude=latitude, longitude=longitude, distance=distance, ad_operation=ad_operation, ad_typology=ad_typology,
                   ad_owner_type=ad_owner_type, minPrice=minPrice, maxPrice=maxPrice, order=order, sort=sort, is_valid=is_valid, error_reason=error_reason, missing_parameters=missing_parameters)
