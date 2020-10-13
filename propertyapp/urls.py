@@ -20,5 +20,5 @@ from django.urls import path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('properties/', propertyAPI, name='property api'),
+    path('qa/properties/', propertyAPI, name='property api'),
 ]

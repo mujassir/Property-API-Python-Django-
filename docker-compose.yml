@@ -9,6 +9,6 @@ services:
     volumes:
       - .:/code
     ports:
-      - 80:80
+      - 8000:80
 
    
